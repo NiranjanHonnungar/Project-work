@@ -13,7 +13,6 @@ window.onload = delete_preloader;
 const login = function () {
   // Modal window
   const overlay = document.querySelector(".overlay");
-  const modals = document.querySelectorAll(".modal");
   //login window
   const loginModal = document.querySelector(".modal__login");
   const btnCloseLoginModal = document.querySelector(".btn--close--login-modal");
@@ -58,6 +57,63 @@ const login = function () {
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       closeModals();
+    }
+  });
+
+  //validation
+
+  const loginForm = document.querySelector(".login-form");
+  const confirmLogin = loginForm.elements["submit"];
+
+  const registerForm = document.querySelector(".register-form");
+  const confirmRegister = registerForm.elements["submit"];
+
+  const validateEmail = function (form) {
+    var mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const email = form.elements["email"];
+    console.log(email);
+    if (!email.value.match(mailFormat)) {
+      email.setCustomValidity("Email address incorrect");
+      email.reportValidity();
+      email.addEventListener("click", () => email.setCustomValidity(""));
+    } else {
+      email.setCustomValidity("");
+      return true;
+    }
+  };
+
+  const validatePassword = function (form) {
+    const password = form.elements["password"];
+    const confirmPassword = form.elements["cpassword"];
+    if (!(password.value === confirmPassword.value)) {
+      confirmPassword.setCustomValidity("Passwords do not match");
+      confirmPassword.reportValidity();
+      confirmPassword.addEventListener("click", () =>
+        confirmPassword.setCustomValidity("")
+      );
+    } else {
+      confirmPassword.setCustomValidity("");
+      return true;
+    }
+  };
+
+  confirmLogin.addEventListener("click", function () {
+    if (
+      validateEmail(loginForm) &&
+      loginForm.elements["password"].checkValidity()
+    ) {
+      alert("Logged in!");
+    }
+  });
+
+  confirmRegister.addEventListener("click", function () {
+    if (
+      validateEmail(registerForm) &&
+      registerForm.elements["password"].checkValidity() &&
+      registerForm.elements["password"].checkValidity() &&
+      validatePassword(registerForm)
+    ) {
+      alert("Registered Succesfully!");
     }
   });
 };
